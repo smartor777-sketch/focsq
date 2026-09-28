@@ -4,7 +4,8 @@
 > записи туннеля, после чего трафик вставал навсегда.
 >
 > Статус: **исправлено и проверено в рантайме** (6:31 непрерывной работы).
-> Оформлено: [luminescq/focsq#2](https://github.com/luminescq/focsq/issues/2).
+> Оформлено: [issue #2](https://github.com/luminescq/focsq/issues/2) и
+> **[PR #3](https://github.com/luminescq/focsq/pull/3)** (открыт, `mergeable`).
 > Дифф: 2 файла, `+118 / −7`.
 >
 > Исходники с фиксом: [smartor777-sketch/focsq](https://github.com/smartor777-sketch/focsq)
@@ -409,16 +410,19 @@ md5 оригинала: `ef45442e02bc9bf733edc23ac1bb0bf1`.
 ## 10. Связанные записи
 
 - Ишью автору сборки: [luminescq/focsq#2](https://github.com/luminescq/focsq/issues/2)
+- **PR с фиксом: [luminescq/focsq#3](https://github.com/luminescq/focsq/pull/3)**
+  (1 коммит, 2 файла, `+118 / −7`, `mergeable`; ветка `fix/tun-write-dropped`)
 - Симптом у пользователей панели: [ildarmaga/wdtt#48](https://github.com/ildarmaga/wdtt/issues/48)
   (15 комментариев, `Запись Tun завершена: Invalid argument`, ответ автора
   от 2026-09-22 «пока не исправлял это»)
 - Первопричина в апстриме: [amurcanov/csqtt](https://github.com/amurcanov/csqtt) —
-  та же строка `dispatcher.rs:926`
+  та же строка `dispatcher.rs:924`
 
 ### Что ещё можно сделать (не сделано)
 
 1. **Патч в `amurcanov/csqtt`** — дефект там тоже есть; апстрим обычно закрывает
    issue только изменением кода, поэтому нужен именно PR, а не описание.
+   На `bfa176f` патч ложится чисто (`git apply --check`) — там та же база.
 2. **Комментарий в `ildarmaga/wdtt#48`** — отсылка на решение, чтобы 15 человек,
    ищущих причину, нашли фикс.
 3. **Разбор серверной стороны** — подтвердить, что `0xFF` — это штатный
@@ -431,21 +435,34 @@ md5 оригинала: `ef45442e02bc9bf733edc23ac1bb0bf1`.
 
 ### 11.1. Репозиторий
 
-**https://github.com/smartor777-sketch/focsq** — публичный, ветка `main`.
+**https://github.com/smartor777-sketch/focsq** — публичный **форк** `luminescq/focsq`,
+ветка `main`. Связь с апстримом восстановлена, PR отправлен:
+**[luminescq/focsq#3](https://github.com/luminescq/focsq/pull/3)** (`mergeable`).
 
-Форк от `luminescq/focsq` (ветка `main` от `bfa176f`, тег `v1.0.0`).
-Исходно создавался через `gh repo fork`, но после перевода в приватный и
-обратно в публичный GitHub **разорвал связь с оригиналом** (`isFork:false`,
-`parent:null`) — то есть напрямую PR в апстрим из него уже не оформить.
-Остаётся ссылка на коммит или комментарий к issue.
+История с переименованиями: форк создавался через `gh repo fork`, но после
+перевода в приватный и обратно в публичный GitHub **разорвал связь с
+оригиналом** (`isFork:false`, `parent:null`) — PR из такого репозитория
+невозможен, API отдаёт `Validation Failed` (head обязан быть форком base).
+Чтобы вернуть PR, пришлось переименовать наше репо в **`focsq-local`**
+(осталось как архив с теми же коммитами) и форкнуть `luminescq/focsq` заново —
+имя `focsq` освободилось, связь восстановилась.
+
+Коммиты в форке (на `main`):
 
 ```
-4c69ab8 (main)  Add Linux bundle v1.0.0-tunfix
+e811136 (main)  README: ссылка на документацию и бандл с фиксом
+59cc4fd         Add Documentation: разбор дефекта записи TUN
+4c69ab8         Add Linux bundle v1.0.0-tunfix
 12a9564 (fix/tun-write-dropped)  Fix TUN write death: drop non-IP packets
 bfa176f (tag: v1.0.0)  1.0.0            ← апстрим
 ```
 
-Обе ветки (`main`, `fix/tun-write-dropped`) указывают на один коммит с фиксом.
+В **PR #3** идёт только ветка `fix/tun-write-dropped` — 1 коммит, 2 файла,
+`+118 / −7`. Ветку `main` в PR не включали намеренно: туда попал бы
+17-мегабайтный бинарь архива.
+
+Все ссылки на `smartor777-sketch/focsq/…` после переименований продолжают
+работать — новый форк занял то же имя и содержит те же пути.
 
 ### 11.2. Где лежат исходники `librust_lib_frontend.so`
 
